@@ -1,8 +1,0 @@
-{
-  "name": "マイクでオシロ",
-  "description": "中学・高校の理科・物理「音」の単元で使う、ブラウザで動く学習用オシロスコープ",
-  "requestFramePermissions": [
-    "microphone"
-  ],
-  "majorCapabilities": []
-}

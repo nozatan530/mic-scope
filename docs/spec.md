@@ -10,7 +10,7 @@
 - [x] 一時停止したままチャレンジに移ると、止まった解析結果でメーターが進み、無音でもクリアになってしまう → 解析は常に動かし、一時停止は波形の描画だけを止める
 - [x] スマホでは周期 T の表示が波形から離れていて、カーソルを動かしながら値を見られない → 一時停止中は波形の上にも T を表示する
 - [x] チャレンジ一覧の「4つのお題」を「5つのお題」に直す
-- [ ] AI Studio 由来の未使用パッケージ・`.env.example`・`metadata.json` を削除し、`package-lock.json` を作る
-- [ ] 計算の自己チェックを `npm run check:dsp` で実行できるようにする
+- [x] AI Studio 由来の未使用パッケージ・`.env.example`・`metadata.json` を削除し、`package-lock.json` を作る
+- [x] 計算の自己チェックを `npm run check:dsp` で実行できるようにする
 - [ ] GitHub Pages で公開する準備（`VITE_BASE` 対応と GitHub Actions のワークフロー）
 - [ ] `/verify`：360px・768px・1366px で通しの確認をして `docs/verify/` に記録する

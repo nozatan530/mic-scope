@@ -32,12 +32,13 @@
 ## コマンド
 
 - プロンプト評価: `node --env-file=.env scripts/eval-prompt.mjs <機能名>`
-- 依存の導入: `npm install --legacy-peer-deps`（雛形由来の `esbuild@0.25` が vite 8 の peer 指定とぶつかるため。未使用パッケージを消せば不要になる）
+- 依存の導入: `npm install`（CI では `npm ci`）
 - 開発サーバー: `npm run dev`（http://localhost:3000）。マイクは localhost なら HTTP でも使える。実機で試すときは HTTPS が必要
 - 型チェック: `npm run lint`（`tsc --noEmit`）
-- 計算の確認: `src/dsp.ts` の `runDspSelfTests()` が `docs/studio-prompt.md` の「計算の確かめ」（合成した正弦波・方形波の振動数、音名とセント、なめらか度、小さい音と雑音で「—」）を確かめる。画面では `?debug=1` で `src/components/DebugPanel.tsx` に表示。コマンドでは `npx tsx <runDspSelfTests を呼ぶスクリプト>` で実行できる（取り込み時点で全13項目 PASS）
-- テスト: （まだなし）
+- 計算の確認: `npm run check:dsp`（`scripts/check-dsp.ts` が `src/dsp.ts` の `runDspSelfTests()` を呼び、`docs/studio-prompt.md` の「計算の確かめ」13項目を確かめる。FAIL があれば終了コード 1）。画面では `?debug=1` で `src/components/DebugPanel.tsx` に表示
+- テスト: `npm run check:dsp`（上記）
 - ビルド: `npm run build`（`dist/` に出力）／確認 `npm run preview`
+- 公開: main に push すると `.github/workflows/deploy.yml` が型チェック・計算の確認・ビルドをして GitHub Pages（https://nozatan530.github.io/mic-scope/）に公開する。ビルド時に `VITE_BASE=/mic-scope/` を渡す
 
 ## 技術スタック
 
@@ -46,4 +47,4 @@
 - サーバーなしの静的サイト。音は Web Audio API（getUserMedia → AnalyserNode）で端末内だけで処理し、録音・送信はしない
 - 保存は localStorage だけ（棚の波形、設定、チャレンジのクリア状況）。キーは `src/constants.ts` の `STORAGE_KEYS`、読み書きは `src/storage.ts`
 - 音の処理（RMS・トリガ・自己相関による振動数推定・音名とセント・なめらか度・自己チェック）は `src/dsp.ts`、定数は `src/constants.ts`、型は `src/types.ts`、波形の描画は `src/components/OscilloscopeCanvas.tsx`
-- Gemini は呼ばない。ただし AI Studio の雛形由来の `@google/genai`・`express`・`dotenv`・`motion`・`esbuild`・`tsx` などの未使用パッケージと `.env.example` がまだ残っている（`/build` で削除候補）
+- Gemini は呼ばない。AI Studio の雛形由来の未使用パッケージ・`.env.example`・`metadata.json` は削除済み
