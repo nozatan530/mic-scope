@@ -1,0 +1,91 @@
+<!doctype html>
+<!--
+  OGP 画像（public/ogp.png, 1200×630）の元。作り直すとき:
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --disable-gpu \
+    --hide-scrollbars --window-size=1200,630 --screenshot=public/ogp.png scripts/ogp.html
+-->
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    background: #07130d;
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    color: #ecfdf5;
+    position: relative;
+  }
+  svg { position: absolute; inset: 0; }
+  .text { position: absolute; left: 72px; top: 64px; }
+  .eyebrow {
+    display: inline-block; font-size: 26px; font-weight: 600; letter-spacing: 0.04em;
+    color: #07130d; background: #39ff7a; padding: 6px 16px; border-radius: 8px;
+  }
+  h1 { margin-top: 22px; font-size: 104px; font-weight: 800; letter-spacing: 0.02em; line-height: 1.05; }
+  .lead { margin-top: 18px; font-size: 34px; font-weight: 600; color: #a7f3d0; }
+  .chips { position: absolute; left: 72px; top: 340px; display: flex; gap: 14px; }
+  .chip {
+    font-size: 26px; font-weight: 700; padding: 8px 18px; border-radius: 999px;
+    background: rgba(7, 19, 13, 0.85); border: 2px solid #1b5e3a; color: #d1fae5;
+  }
+</style>
+</head>
+<body>
+<svg width="1200" height="630" viewBox="0 0 1200 630" id="scope"></svg>
+<div class="text">
+  <span class="eyebrow">中学・高校 理科「音」</span>
+  <h1>マイクでオシロ</h1>
+  <p class="lead">声や楽器の音を、その場で波形に。</p>
+</div>
+<div class="chips">
+  <span class="chip">高さ ＝ 振動数</span>
+  <span class="chip">大きさ ＝ 振幅</span>
+  <span class="chip">音色 ＝ 波形の形</span>
+</div>
+<script>
+  const svg = document.getElementById('scope');
+  const NS = 'http://www.w3.org/2000/svg';
+  const W = 1200, H = 630;
+  const add = (tag, attrs) => {
+    const el = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+    svg.appendChild(el);
+    return el;
+  };
+  // 方眼（アプリと同じ 横10 × 縦8）
+  for (let i = 1; i < 10; i++) add('line', { x1: i * W / 10, y1: 0, x2: i * W / 10, y2: H, stroke: '#103b24', 'stroke-width': 2 });
+  for (let j = 1; j < 8; j++) add('line', { x1: 0, y1: j * H / 8, x2: W, y2: j * H / 8, stroke: '#103b24', 'stroke-width': 2 });
+
+  // 声のような波形（基本音＋倍音）。下の帯に描き、その中心を 0 線にする
+  const midY = 540, amp = 66, periods = 5.5;
+  add('line', { x1: 0, y1: midY, x2: W, y2: midY, stroke: '#257a4c', 'stroke-width': 3 });
+  const f = (t) => Math.sin(t) + 0.45 * Math.sin(2 * t + 0.6) + 0.22 * Math.sin(3 * t + 1.1);
+  let maxV = 0;
+  for (let x = 0; x <= W; x++) maxV = Math.max(maxV, Math.abs(f((x / W) * periods * 2 * Math.PI)));
+  let d = '';
+  for (let x = 0; x <= W; x += 2) {
+    const y = midY - (f((x / W) * periods * 2 * Math.PI) / maxV) * amp;
+    d += (x === 0 ? 'M' : 'L') + x + ',' + y.toFixed(1);
+  }
+  add('path', { d, fill: 'none', stroke: '#39ff7a', 'stroke-width': 6, 'stroke-linejoin': 'round', 'stroke-linecap': 'round', opacity: 0.95 });
+
+  // 周期 T を測るカーソル A・B（1周期ぶん）
+  // A は 4周期目の山、B はそのとなりの山に合わせる
+  const period = W / periods;
+  let peakX = 0, peakV = -Infinity;
+  for (let x = 3 * period; x < 4 * period; x += 0.5) {
+    const v = f((x / W) * periods * 2 * Math.PI);
+    if (v > peakV) { peakV = v; peakX = x; }
+  }
+  const cursorTop = 420;
+  const xA = peakX, xB = xA + period;
+  add('rect', { x: xA, y: cursorTop, width: period, height: H - cursorTop, fill: 'rgba(255,255,255,0.06)' });
+  for (const [x, color] of [[xA, '#60a5fa'], [xB, '#fb923c']]) {
+    add('line', { x1: x, y1: cursorTop, x2: x, y2: H, stroke: color, 'stroke-width': 3, 'stroke-dasharray': '10 8' });
+  }
+  const tl = add('text', { x: xA + period / 2, y: cursorTop + 36, 'text-anchor': 'middle', fill: '#ffffff', 'font-size': 34, 'font-weight': 700, 'font-family': 'Menlo, monospace' });
+  tl.textContent = 'T';
+</script>
+</body>
+</html>

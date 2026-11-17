@@ -39,6 +39,7 @@
 - テスト: `npm run check:dsp`（上記）
 - ビルド: `npm run build`（`dist/` に出力）／確認 `npm run preview`
 - 公開: main に push すると `.github/workflows/deploy.yml` が型チェック・計算の確認・ビルドをして GitHub Pages（https://nozatan530.github.io/mic-scope/）に公開する。ビルド時に `VITE_BASE=/mic-scope/` を渡す
+- OGP 画像: `public/ogp.png`（1200×630）。元は `scripts/ogp.html` で、作り直しのコマンドはそのファイルの先頭に書いてある。URL は `index.html` の og:image に絶対パスで書く
 
 ## 技術スタック
 
