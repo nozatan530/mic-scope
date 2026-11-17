@@ -10,5 +10,6 @@ coverage/
 # template
 prompts/*/eval-result.json
 docs/verify/*.png
+docs/verify/*.jpg
 .claude/settings.local.json
 !.claude/skills/build/
