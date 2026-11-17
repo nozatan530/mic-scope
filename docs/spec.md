@@ -16,3 +16,11 @@
 - [x] スマホでは2枚目を選んでも「比べる」欄がカードの下に隠れて気づきにくい → 2枚そろったら自動でスクロールする
 - [x] GitHub Pages で公開する準備（`VITE_BASE` 対応と GitHub Actions のワークフロー）
 - [x] `/verify`：360px・768px・1366px で通しの確認をして `docs/verify/` に記録する
+
+### 2026-11-17 振り返りから（重要な順）
+
+- [ ] 実機（iPad Safari・Chromebook・Android）で、マイクの許可から波形の表示まで通るか、`?debug=1` で echoCancellation・noiseSuppression・autoGainControl が切れているかを確かめる
+- [ ] 実際の声・音叉・鍵盤で、チャレンジのメーターの反応（揺れすぎ・遅すぎ）と、オクターブ違い（220Hz や 880Hz と出る）がないかを確かめる
+- [ ] 棚に保存する波形を 20 ms より長くする（「共通の時間軸」を 5・10 ms にすると右側が空く）
+- [ ] GitHub Actions の Node 20 非推奨の警告に対応する（checkout・setup-node・configure-pages などを新しい版に上げる）
+- [ ] 授業で使ったら、生徒の反応を `/retro` で記録する
