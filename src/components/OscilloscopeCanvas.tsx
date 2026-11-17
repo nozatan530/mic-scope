@@ -192,6 +192,28 @@ export function renderOscilloscopeCanvas(
 
     drawCursor(options.cursorAFrac, '#60a5fa', '#2563eb', 'A');
     drawCursor(options.cursorBFrac, '#fb923c', '#ea580c', 'B');
+
+    // A と B の間の時間を波形の上にも出す（スマホでは下の T 表示が画面外になるため）
+    const deltaMs =
+      Math.abs(options.cursorBFrac - options.cursorAFrac) *
+      options.msPerDiv *
+      GRID_DIVISIONS_X;
+    const tLabel = `T = ${deltaMs.toFixed(1)} ms`;
+    ctx.font = '700 14px "JetBrains Mono", monospace';
+    const padX = 8;
+    const boxW = ctx.measureText(tLabel).width + padX * 2;
+    const boxH = 24;
+    const centerX = (xA + xB) / 2;
+    const boxX = Math.max(4, Math.min(cssW - boxW - 4, centerX - boxW / 2));
+    const boxY = 32;
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+    ctx.beginPath();
+    ctx.roundRect(boxX, boxY, boxW, boxH, 6);
+    ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(tLabel, boxX + padX, boxY + boxH / 2);
   }
 
   ctx.restore();
