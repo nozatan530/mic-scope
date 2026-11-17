@@ -38,7 +38,7 @@
 - 計算の確認: `npm run check:dsp`（`scripts/check-dsp.ts` が `src/dsp.ts` の `runDspSelfTests()` を呼び、`docs/studio-prompt.md` の「計算の確かめ」13項目と、棚の波形の左端そろえを確かめる（計14項目）。FAIL があれば終了コード 1）。画面では `?debug=1` で `src/components/DebugPanel.tsx` に表示
 - テスト: `npm run check:dsp`（上記）
 - ビルド: `npm run build`（`dist/` に出力）／確認 `npm run preview`
-- 公開: main に push すると `.github/workflows/deploy.yml` が型チェック・計算の確認・ビルドをして GitHub Pages（https://nozatan530.github.io/mic-scope/）に公開する。ビルド時に `VITE_BASE=/mic-scope/` を渡す
+- 公開: main に push すると `.github/workflows/deploy.yml` が型チェック・計算の確認・ビルドをして GitHub Pages に公開する。URL は **https://oscillo.meetupsensei.com/**（`public/CNAME` と Pages の custom domain 設定。DNS は `*.meetupsensei.com` のワイルドカードで設定済み）。手順の元は `~/code/templates/deploy-template.md`
 - OGP 画像: `public/ogp.png`（1200×630）。元は `scripts/ogp.html` で、作り直しのコマンドはそのファイルの先頭に書いてある。URL は `index.html` の og:image に絶対パスで書く
 - ファビコン: `public/favicon.svg`（元）、`favicon-32.png`・`apple-touch-icon.png`（180px、角丸なし）はそれを headless Chrome で書き出したもの
 

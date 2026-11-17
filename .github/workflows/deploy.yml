@@ -1,5 +1,5 @@
 # main に push するたびに、ビルドして GitHub Pages に公開する
-# 公開先: https://nozatan530.github.io/mic-scope/
+# 公開先: https://oscillo.meetupsensei.com/（独自ドメイン。public/CNAME と Pages の設定）
 name: GitHub Pages に公開
 
 on:
@@ -29,8 +29,6 @@ jobs:
       - run: npm run lint
       - run: npm run check:dsp
       - run: npm run build
-        env:
-          VITE_BASE: /mic-scope/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
