@@ -12,5 +12,5 @@
 - [x] チャレンジ一覧の「4つのお題」を「5つのお題」に直す
 - [x] AI Studio 由来の未使用パッケージ・`.env.example`・`metadata.json` を削除し、`package-lock.json` を作る
 - [x] 計算の自己チェックを `npm run check:dsp` で実行できるようにする
-- [ ] GitHub Pages で公開する準備（`VITE_BASE` 対応と GitHub Actions のワークフロー）
+- [x] GitHub Pages で公開する準備（`VITE_BASE` 対応と GitHub Actions のワークフロー）
 - [ ] `/verify`：360px・768px・1366px で通しの確認をして `docs/verify/` に記録する
