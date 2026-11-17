@@ -15,7 +15,7 @@ import {
   TIMEBASE_OPTIONS_MS,
 } from '../constants';
 import type { TimebaseMs } from '../constants';
-import { findTriggerIndex } from '../dsp';
+import { findFirstRisingZeroCrossing } from '../dsp';
 import type { ShelfItem } from '../types';
 
 interface ShelfScreenProps {
@@ -31,17 +31,9 @@ function getAlignedSamples(item: ShelfItem, windowMs: number, normalize: boolean
   if (samples.length === 0) return [];
 
   const neededCount = Math.max(2, Math.round((windowMs / 1000) * fs));
-  // Ensure waveform starts at a rising zero-crossing
-  let startIdx = 0;
-  const firstPrev = samples[0];
-  const firstCurr = samples[1] ?? 0;
-  const alreadyAtZeroCross = firstPrev <= 0 && firstCurr > 0;
-  if (!alreadyAtZeroCross) {
-    const trig = findTriggerIndex(samples, Math.min(samples.length, neededCount), true);
-    if (trig.triggered) {
-      startIdx = trig.startIndex;
-    }
-  }
+  // 左端を「下から上へ 0 を横切る最初の点」にそろえる
+  const crossing = findFirstRisingZeroCrossing(samples);
+  const startIdx = crossing >= 0 ? crossing : 0;
 
   const available = samples.slice(startIdx, startIdx + neededCount);
   if (!normalize) return available;

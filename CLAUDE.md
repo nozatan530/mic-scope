@@ -35,7 +35,7 @@
 - 依存の導入: `npm install`（CI では `npm ci`）
 - 開発サーバー: `npm run dev`（http://localhost:3000）。マイクは localhost なら HTTP でも使える。実機で試すときは HTTPS が必要
 - 型チェック: `npm run lint`（`tsc --noEmit`）
-- 計算の確認: `npm run check:dsp`（`scripts/check-dsp.ts` が `src/dsp.ts` の `runDspSelfTests()` を呼び、`docs/studio-prompt.md` の「計算の確かめ」13項目を確かめる。FAIL があれば終了コード 1）。画面では `?debug=1` で `src/components/DebugPanel.tsx` に表示
+- 計算の確認: `npm run check:dsp`（`scripts/check-dsp.ts` が `src/dsp.ts` の `runDspSelfTests()` を呼び、`docs/studio-prompt.md` の「計算の確かめ」13項目と、棚の波形の左端そろえを確かめる（計14項目）。FAIL があれば終了コード 1）。画面では `?debug=1` で `src/components/DebugPanel.tsx` に表示
 - テスト: `npm run check:dsp`（上記）
 - ビルド: `npm run build`（`dist/` に出力）／確認 `npm run preview`
 - 公開: main に push すると `.github/workflows/deploy.yml` が型チェック・計算の確認・ビルドをして GitHub Pages（https://nozatan530.github.io/mic-scope/）に公開する。ビルド時に `VITE_BASE=/mic-scope/` を渡す

@@ -383,6 +383,35 @@ export function findTriggerIndex(
   };
 }
 
+/**
+ * 棚の波形を左端でそろえるための、最初の「下から上へ 0 を横切る点」。
+ * findTriggerIndex はライブ表示用で、表示幅ぶん残る範囲の「最後の」交差を選ぶため、
+ * 保存済みの短い波形に使うと右端近くから始まって、ほとんど描けなくなる。
+ * 先頭がすでに上向きの交差（ライブのトリガでそろえて保存したもの）なら 0 を返す。
+ * 見つからなければ -1。
+ */
+export function findFirstRisingZeroCrossing(samples: Float32Array | number[]): number {
+  const len = samples.length;
+  if (len < 2) return -1;
+  let maxAbs = 0;
+  for (let i = 0; i < len; i++) {
+    const abs = Math.abs(samples[i]);
+    if (abs > maxAbs) maxAbs = abs;
+  }
+  if (maxAbs === 0) return -1;
+  const hysteresis = TRIGGER_HYSTERESIS_RATIO * maxAbs;
+
+  if (Math.abs(samples[0]) <= hysteresis && samples[1] > samples[0]) return 0;
+
+  let armed = false;
+  for (let i = 1; i < len; i++) {
+    const curr = samples[i];
+    if (curr <= -hysteresis) armed = true;
+    if (armed && samples[i - 1] <= 0 && curr > 0) return i;
+  }
+  return -1;
+}
+
 export function extractDisplaySamples(
   samples: Float32Array,
   displaySampleCount: number
@@ -568,6 +597,24 @@ export function runDspSelfTests(): SelfTestReport {
       name: '白色雑音',
       passed,
       detail: `f=${res.frequency === null ? '—' : res.frequency}（rMax=${res.rMax.toFixed(2)}）`,
+    });
+  }
+
+  {
+    // 棚の波形（20 ms ぶん）のそろえ方：最初の上向き交差を、1周期以内に見つけること
+    const period = fs / 220;
+    const startsAtCrossing = generateSine(220, fs, 960);
+    const midCycle = new Float32Array(960);
+    for (let i = 0; i < 960; i++) {
+      midCycle[i] = 0.5 * Math.sin((2 * Math.PI * 220 * i) / fs + 1.0);
+    }
+    const a = findFirstRisingZeroCrossing(startsAtCrossing);
+    const b = findFirstRisingZeroCrossing(midCycle);
+    const passed = a === 0 && b > 0 && b <= period;
+    items.push({
+      name: '棚の波形の左端そろえ',
+      passed,
+      detail: `交差から始まる波形→${a} / 途中から始まる波形→${b}（1周期 ${period.toFixed(0)} サンプル以内）`,
     });
   }
 
