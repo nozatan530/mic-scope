@@ -331,15 +331,18 @@ export default function App() {
         }
       }
 
+      // 一時停止で止めるのはスコープの波形の描画だけ。解析は常に続ける。
+      // （止めると、一時停止のままチャレンジに移ったときに古い値でメーターが進んでしまう。
+      //   スコープ画面は一時停止中は pausedSnapshot の値を表示するので影響しない）
       // Loudness update (~20 Hz)
-      if (!isPausedRef.current && now - lastLoudnessUpdate >= 50) {
+      if (now - lastLoudnessUpdate >= 50) {
         lastLoudnessUpdate = now;
         const rms = calculateRms(buffer);
         setLiveLoudness(calculateLoudness(rms));
       }
 
       // Pitch & Smoothness update at 10 Hz (every 100 ms)
-      if (!isPausedRef.current && now - lastFreqUpdate >= FREQ_UPDATE_INTERVAL_MS) {
+      if (now - lastFreqUpdate >= FREQ_UPDATE_INTERVAL_MS) {
         lastFreqUpdate = now;
         const rawAnalysis = analyzeSignal(buffer, fs);
         challengeAnalysisRef.current = rawAnalysis;

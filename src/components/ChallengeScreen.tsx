@@ -213,7 +213,11 @@ function CentsNeedleMeter({
       <div className="text-center font-mono-tabular text-lg font-bold text-slate-900">
         {cents === null
           ? '音を出してください'
-          : `${cents > 0 ? '＋' : cents < 0 ? '−' : ''}${Math.round(Math.abs(cents))} セント`}
+          : (() => {
+              // 丸めてから符号を決める（−0.3 を「−0」と出さない）
+              const r = Math.round(cents);
+              return `${r > 0 ? '＋' : r < 0 ? '−' : ''}${Math.abs(r)} セント`;
+            })()}
       </div>
       <p className="text-center text-xs text-slate-500">
         100セント ＝ 半音1つぶん（＋は高め、−は低め）
@@ -522,7 +526,7 @@ export function ChallengeScreen({
         <div>
           <h2 className="text-xl font-bold text-slate-900">チャレンジ</h2>
           <p className="text-sm text-slate-600 mt-0.5">
-            声や楽器の音で4つのお題に挑戦しよう。クリアすると ✓ がつきます。
+            声や楽器の音で5つのお題に挑戦しよう。クリアすると ✓ がつきます。
           </p>
         </div>
 
