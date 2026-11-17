@@ -258,6 +258,16 @@ export function ShelfScreen({
     [selectedIds, items]
   );
 
+  // 2枚目を選んだら「比べる」欄までスクロールする（スマホではカードの下に隠れて気づきにくいため）
+  const compareSectionRef = useRef<HTMLElement | null>(null);
+  const prevSelectedCountRef = useRef(0);
+  useEffect(() => {
+    if (selectedItems.length === 2 && prevSelectedCountRef.current < 2) {
+      compareSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    prevSelectedCountRef.current = selectedItems.length;
+  }, [selectedItems.length]);
+
   // Update default common timebase when 2 items become selected
   useEffect(() => {
     if (selectedItems.length === 2) {
@@ -467,7 +477,9 @@ export function ShelfScreen({
 
       {selectedItems.length === 2 && (
         <section
+          ref={compareSectionRef}
           aria-label="波形の比較"
+          style={{ scrollMarginTop: 12 }}
           className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 space-y-4"
         >
           <div className="flex flex-wrap items-center justify-between gap-3">

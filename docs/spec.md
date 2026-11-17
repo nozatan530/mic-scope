@@ -13,5 +13,6 @@
 - [x] AI Studio 由来の未使用パッケージ・`.env.example`・`metadata.json` を削除し、`package-lock.json` を作る
 - [x] 計算の自己チェックを `npm run check:dsp` で実行できるようにする
 - [x] 棚の「比べる」で、先頭が 0 の交差から始まらない波形が左端に少ししか描かれない → 最初の上向きの交差でそろえる（自己チェックに追加）
+- [x] スマホでは2枚目を選んでも「比べる」欄がカードの下に隠れて気づきにくい → 2枚そろったら自動でスクロールする
 - [x] GitHub Pages で公開する準備（`VITE_BASE` 対応と GitHub Actions のワークフロー）
 - [ ] `/verify`：360px・768px・1366px で通しの確認をして `docs/verify/` に記録する
